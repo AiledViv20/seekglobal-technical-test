@@ -13,6 +13,7 @@ export default function ProtectedLayout({
 }) {
   const router = useRouter();
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
+  const hasChecked = useAuth((state) => state.hasChecked);
   const checkAuth = useAuth((state) => state.checkAuth);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -21,12 +22,12 @@ export default function ProtectedLayout({
   }, [checkAuth]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (hasChecked && !isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [hasChecked, isAuthenticated, router]);
 
-  if (!isAuthenticated) {
+  if (!hasChecked || !isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
