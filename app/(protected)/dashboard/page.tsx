@@ -52,7 +52,6 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col h-full p-6 lg:p-8">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Mis Tareas</h1>
@@ -66,7 +65,6 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      {/* Content */}
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-gray-900" />
@@ -75,7 +73,6 @@ export default function DashboardPage() {
         <TaskBoard tasks={tasks} onEdit={handleEdit} onDelete={handleDelete} />
       )}
 
-      {/* Modals */}
       <TaskModal
         isOpen={isTaskModalOpen}
         task={editingTask}

@@ -8,7 +8,6 @@ export const metadata = {
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen">
-      {/* Panel izquierdo - Imagen */}
       <div className="relative hidden lg:flex lg:w-1/2 items-end p-12">
         <Image
           src="/images/bg-login.jpg"
@@ -31,7 +30,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Panel derecho - Formulario */}
       <div className="flex w-full lg:w-1/2 items-center justify-center px-6 py-12 bg-white">
         <LoginForm />
       </div>

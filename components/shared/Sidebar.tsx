@@ -12,6 +12,11 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
+/**
+ * Side navigation bar.
+ * Fixed on desktop, sliding drawer with overlay on mobile.
+ * Contains the logo, dashboard link and logout button.
+ */
 export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const router = useRouter();
   const logout = useAuth((state) => state.logout);
@@ -27,7 +32,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Overlay - solo visible en <lg cuando el drawer está abierto */}
+      {/* Overlay - only visible below lg breakpoint when the drawer is open */}
       {isOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
@@ -35,7 +40,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`
           fixed inset-y-0 left-0 z-50 flex w-56 flex-col bg-[#1a1a2e] text-white
@@ -44,7 +48,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        {/* Botón cerrar drawer */}
         <div className="flex justify-end px-4 pt-4 lg:hidden">
           <button
             onClick={onClose}
@@ -54,7 +57,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           </button>
         </div>
 
-        {/* Logo */}
         <div className="flex items-center justify-center px-6 py-6 lg:pt-6">
           <Image
             src="/images/logo.jpg"
@@ -66,7 +68,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           />
         </div>
 
-        {/* Navigation */}
         <nav className="flex flex-1 flex-col px-3">
           <a
             href="/dashboard"
@@ -80,7 +81,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Logout */}
           <button
             onClick={handleLogout}
             className="mb-6 flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-300 cursor-pointer"

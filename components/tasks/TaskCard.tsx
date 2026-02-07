@@ -6,12 +6,14 @@ import { IoFlagOutline } from "react-icons/io5";
 import { BsCalendar3 } from "react-icons/bs";
 import { Task } from "@/modules/tasks/domain";
 
+/** Color styles per priority level (badge). */
 const PRIORITY_STYLES: Record<string, string> = {
   high: "bg-red-100 text-red-700",
   mid: "bg-yellow-100 text-yellow-700",
   low: "bg-green-100 text-green-700",
 };
 
+/** Human-readable labels for each priority level. */
 const PRIORITY_LABELS: Record<string, string> = {
   high: "Alta",
   mid: "Media",
@@ -24,6 +26,11 @@ interface TaskCardProps {
   onDelete: (task: Task) => void;
 }
 
+/**
+ * Individual task card with a context menu for edit/delete.
+ * Displays title, description, priority and creation date.
+ * The menu closes on click outside.
+ */
 export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -45,7 +52,6 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
 
   return (
     <div className="rounded-xl bg-white p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-      {/* Header: title + menu */}
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-semibold text-gray-900 leading-snug">
           {task.title}
@@ -76,12 +82,10 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
         </div>
       </div>
 
-      {/* Description */}
       <p className="mt-2 text-xs text-gray-500 line-clamp-2">
         {task.description}
       </p>
 
-      {/* Footer: priority + date */}
       <div className="mt-3 flex items-center justify-between">
         <span
           className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-0.5 text-xs font-normal ${PRIORITY_STYLES[task.priority]}`}

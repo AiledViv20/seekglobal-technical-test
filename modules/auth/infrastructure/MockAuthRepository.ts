@@ -1,5 +1,6 @@
 import { MockAccount, AuthRepository } from "../domain";
 
+/** Predefined test accounts to simulate the authentication backend. */
 const MOCK_USERS: MockAccount[] = [
   {
     user: {
@@ -23,6 +24,10 @@ const MOCK_USERS: MockAccount[] = [
   },
 ];
 
+/**
+ * Mock implementation of the authentication repository.
+ * Looks up users in an in-memory array to simulate a real backend.
+ */
 export class MockAuthRepository implements AuthRepository {
   findByEmailAndPassword(email: string, password: string): MockAccount | undefined {
     return MOCK_USERS.find((u) => u.user.email === email && u.password === password);

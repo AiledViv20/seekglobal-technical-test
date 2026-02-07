@@ -1,5 +1,6 @@
 import { Task, TaskRepository } from "../domain";
 
+/** Predefined test tasks to simulate the backend. */
 let mockTasks: Task[] = [
   {
     id: "t1",
@@ -75,6 +76,10 @@ let mockTasks: Task[] = [
   },
 ];
 
+/**
+ * Mock implementation of the task repository.
+ * Stores tasks in an in-memory array to simulate CRUD operations.
+ */
 export class MockTaskRepository implements TaskRepository {
   findByUserId(userId: string): Task[] {
     return mockTasks.filter((t) => t.userId === userId);
@@ -84,6 +89,7 @@ export class MockTaskRepository implements TaskRepository {
     return mockTasks.find((t) => t.id === id);
   }
 
+  /** Inserts the task at the beginning of the array (most recent first). */
   insert(task: Task): void {
     mockTasks = [task, ...mockTasks];
   }

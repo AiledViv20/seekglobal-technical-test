@@ -7,12 +7,14 @@ import { TaskFinder, TaskCreator, TaskUpdater, TaskDeleter } from "../applicatio
 import { MockTaskRepository } from "../infrastructure";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 
+// Application layer instances (dependency injection)
 const repository = new MockTaskRepository();
 const taskFinder = new TaskFinder(repository);
 const taskCreator = new TaskCreator(repository);
 const taskUpdater = new TaskUpdater(repository);
 const taskDeleter = new TaskDeleter(repository);
 
+/** Task store state and actions. */
 interface TaskState {
   tasks: Task[];
   isLoading: boolean;
@@ -23,11 +25,17 @@ interface TaskState {
   removeTask: (id: string) => Promise<void>;
 }
 
+/**
+ * Zustand store for managing task state.
+ * Connects the application layer use cases with React components.
+ * Gets the userId from the auth store via useAuth.getState().
+ */
 export const useTasks = create<TaskState>((set) => ({
   tasks: [],
   isLoading: false,
   error: null,
 
+  /** Fetches the authenticated user's tasks from the repository. */
   fetchTasks: async () => {
     const userId = useAuth.getState().user?.id;
     if (!userId) return;
@@ -43,6 +51,7 @@ export const useTasks = create<TaskState>((set) => ({
     }
   },
 
+  /** Creates a new task and prepends it to the list. */
   addTask: async (data: TaskFormData) => {
     const userId = useAuth.getState().user?.id;
     if (!userId) return;
@@ -59,6 +68,7 @@ export const useTasks = create<TaskState>((set) => ({
     }
   },
 
+  /** Updates an existing task and replaces its version in the list. */
   editTask: async (id: string, data: Partial<TaskFormData>) => {
     set({ error: null });
     try {
@@ -74,6 +84,7 @@ export const useTasks = create<TaskState>((set) => ({
     }
   },
 
+  /** Deletes a task and removes it from the local list. */
   removeTask: async (id: string) => {
     set({ error: null });
     try {
