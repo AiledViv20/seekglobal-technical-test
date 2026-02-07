@@ -16,6 +16,7 @@ interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  hasChecked: boolean;
   error: string | null;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
@@ -27,6 +28,7 @@ export const useAuth = create<AuthState>((set) => ({
   token: null,
   isAuthenticated: false,
   isLoading: false,
+  hasChecked: false,
   error: null,
 
   login: async (credentials: LoginCredentials) => {
@@ -62,7 +64,10 @@ export const useAuth = create<AuthState>((set) => ({
 
   checkAuth: () => {
     const token = localStorage.getItem(TOKEN_KEY);
-    if (!token) return;
+    if (!token) {
+      set({ hasChecked: true });
+      return;
+    }
 
     const result = authenticator.validateToken(token);
     if (result) {
@@ -70,9 +75,11 @@ export const useAuth = create<AuthState>((set) => ({
         user: result.user,
         token: result.token,
         isAuthenticated: true,
+        hasChecked: true,
       });
     } else {
       localStorage.removeItem(TOKEN_KEY);
+      set({ hasChecked: true });
     }
   },
 }));
