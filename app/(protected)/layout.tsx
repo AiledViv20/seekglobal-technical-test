@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/stores/auth.store";
-import Sidebar from "@/components/layout/Sidebar";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import Sidebar from "@/components/shared/Sidebar";
 
 export default function ProtectedLayout({
   children,
@@ -11,8 +11,8 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const checkAuth = useAuthStore((state) => state.checkAuth);
+  const isAuthenticated = useAuth((state) => state.isAuthenticated);
+  const checkAuth = useAuth((state) => state.checkAuth);
 
   useEffect(() => {
     checkAuth();

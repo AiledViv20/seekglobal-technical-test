@@ -1,7 +1,7 @@
 "use client";
 
-import { Task, TaskStatus } from "@/lib/types/task.types";
-import TaskColumn from "@/components/tasks/TaskColumn";
+import { Task, TaskStatus } from "@/modules/tasks/domain";
+import TaskColumn from "./TaskColumn";
 
 const COLUMNS: { key: TaskStatus; title: string }[] = [
   { key: "todo", title: "Por Hacer" },

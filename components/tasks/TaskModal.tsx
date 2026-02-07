@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { HiX } from "react-icons/hi";
-import { Task, TaskFormData, TaskStatus, TaskPriority } from "@/lib/types/task.types";
+import { Task, TaskFormData, TaskStatus, TaskPriority } from "@/modules/tasks/domain";
 
 const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
   { value: "todo", label: "Por Hacer" },

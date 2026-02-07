@@ -4,11 +4,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MdDashboard } from "react-icons/md";
 import { HiOutlineLogout } from "react-icons/hi";
-import { useAuthStore } from "@/lib/stores/auth.store";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export default function Sidebar() {
   const router = useRouter();
-  const logout = useAuthStore((state) => state.logout);
+  const logout = useAuth((state) => state.logout);
 
   const handleLogout = () => {
     logout();

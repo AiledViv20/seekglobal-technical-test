@@ -2,16 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { HiPlus } from "react-icons/hi";
-import { useAuthStore } from "@/lib/stores/auth.store";
-import { useTaskStore } from "@/lib/stores/task.store";
-import { Task, TaskFormData } from "@/lib/types/task.types";
+import { useTasks } from "@/modules/tasks/hooks/useTasks";
+import { Task, TaskFormData } from "@/modules/tasks/domain";
 import TaskBoard from "@/components/tasks/TaskBoard";
 import TaskModal from "@/components/tasks/TaskModal";
 import DeleteConfirmModal from "@/components/tasks/DeleteConfirmModal";
 
 export default function DashboardPage() {
-  const user = useAuthStore((state) => state.user);
-  const { tasks, isLoading, fetchTasks, addTask, editTask, removeTask } = useTaskStore();
+  const { tasks, isLoading, fetchTasks, addTask, editTask, removeTask } = useTasks();
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);

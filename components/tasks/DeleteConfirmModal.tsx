@@ -1,7 +1,7 @@
 "use client";
 
 import { HiX } from "react-icons/hi";
-import { Task } from "@/lib/types/task.types";
+import { Task } from "@/modules/tasks/domain";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
