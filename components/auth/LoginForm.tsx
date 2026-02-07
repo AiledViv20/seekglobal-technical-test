@@ -7,21 +7,44 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { login, isLoading, error } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [validationError, setValidationError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const validateEmail = (value: string): string => {
+    if (!value.trim()) return "";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(value.trim())) return "Ingresa un correo electrónico válido.";
+    return "";
+  };
+
+  const validatePassword = (value: string): string => {
+    if (!value) return "";
+    if (value.length < 3) return "La contraseña debe tener al menos 3 caracteres.";
+    if (!/\d/.test(value)) return "La contraseña debe contener al menos un número.";
+    return "";
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    setEmailError(validateEmail(value));
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    setPasswordError(validatePassword(value));
+  };
+
+  const isFormValid = email.trim() && !validateEmail(email) && password.trim() && !validatePassword(password);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setValidationError("");
 
-    if (!email.trim() || !password.trim()) {
-      setValidationError("Todos los campos son obligatorios.");
-      return;
-    }
+    if (!isFormValid) return;
 
     await login({ email: email.trim(), password });
 
@@ -30,8 +53,6 @@ export default function LoginForm() {
       router.push("/dashboard");
     }
   };
-
-  const displayError = validationError || error;
 
   return (
     <div className="w-full max-w-md">
@@ -56,9 +77,12 @@ export default function LoginForm() {
             type="email"
             placeholder="Ingresa tu email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 transition-colors"
+            onChange={(e) => handleEmailChange(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-gray-300 focus:outline-none focus:ring-0 transition-colors"
           />
+          {emailError && (
+            <p className="mt-1 text-[13px] italic" style={{ color: "#CE2D2D" }}>{emailError}</p>
+          )}
         </div>
 
         {/* Password */}
@@ -75,8 +99,8 @@ export default function LoginForm() {
               type={showPassword ? "text" : "password"}
               placeholder="Ingresa tu contraseña"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 transition-colors"
+              onChange={(e) => handlePasswordChange(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 text-gray-900 placeholder-gray-400 focus:border-gray-300 focus:outline-none focus:ring-0 transition-colors"
             />
             <button
               type="button"
@@ -91,22 +115,18 @@ export default function LoginForm() {
               )}
             </button>
           </div>
+          {passwordError && (
+            <p className="mt-1 text-[13px] italic" style={{ color: "#CE2D2D" }}>{passwordError}</p>
+          )}
         </div>
-
-        {/* Error */}
-        {displayError && (
-          <p className="text-sm text-red-600 bg-red-50 rounded-lg px-4 py-3">
-            {displayError}
-          </p>
-        )}
 
         {/* Submit */}
         <button
           type="submit"
-          disabled={isLoading}
-          className="w-full rounded-full bg-gray-900 py-3.5 text-white font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          disabled={isLoading || !isFormValid}
+          className="w-full mt-6 rounded-full bg-gray-900 py-3.5 text-white font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
-          {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
+          {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
         </button>
       </form>
     </div>
