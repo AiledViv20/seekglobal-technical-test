@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
-import { Task } from "@/lib/types/task.types";
+import { Task } from "@/modules/tasks/domain";
 
 const PRIORITY_STYLES: Record<string, string> = {
   high: "bg-red-100 text-red-700",

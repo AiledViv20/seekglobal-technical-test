@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
-import { useAuthStore } from "@/lib/stores/auth.store";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +25,7 @@ export default function LoginForm() {
 
     await login({ email: email.trim(), password });
 
-    const { isAuthenticated } = useAuthStore.getState();
+    const { isAuthenticated } = useAuth.getState();
     if (isAuthenticated) {
       router.push("/dashboard");
     }

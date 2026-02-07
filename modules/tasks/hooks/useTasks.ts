@@ -1,7 +1,16 @@
+"use client";
+
 import { create } from "zustand";
-import { Task, TaskFormData } from "@/lib/types/task.types";
-import * as taskService from "@/lib/services/task.service";
-import { useAuthStore } from "@/lib/stores/auth.store";
+import { Task, TaskFormData } from "../domain";
+import { TaskFinder, TaskCreator, TaskUpdater, TaskDeleter } from "../application";
+import { MockTaskRepository } from "../infrastructure";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+
+const repository = new MockTaskRepository();
+const taskFinder = new TaskFinder(repository);
+const taskCreator = new TaskCreator(repository);
+const taskUpdater = new TaskUpdater(repository);
+const taskDeleter = new TaskDeleter(repository);
 
 interface TaskState {
   tasks: Task[];
@@ -13,18 +22,18 @@ interface TaskState {
   removeTask: (id: string) => Promise<void>;
 }
 
-export const useTaskStore = create<TaskState>((set) => ({
+export const useTasks = create<TaskState>((set) => ({
   tasks: [],
   isLoading: false,
   error: null,
 
   fetchTasks: async () => {
-    const userId = useAuthStore.getState().user?.id;
+    const userId = useAuth.getState().user?.id;
     if (!userId) return;
 
     set({ isLoading: true, error: null });
     try {
-      const tasks = await taskService.getTasks(userId);
+      const tasks = await taskFinder.run(userId);
       set({ tasks, isLoading: false });
     } catch (error) {
       set({
@@ -35,12 +44,12 @@ export const useTaskStore = create<TaskState>((set) => ({
   },
 
   addTask: async (data: TaskFormData) => {
-    const userId = useAuthStore.getState().user?.id;
+    const userId = useAuth.getState().user?.id;
     if (!userId) return;
 
     set({ error: null });
     try {
-      const newTask = await taskService.createTask(data, userId);
+      const newTask = await taskCreator.run(data, userId);
       set((state) => ({ tasks: [newTask, ...state.tasks] }));
     } catch (error) {
       set({
@@ -52,7 +61,7 @@ export const useTaskStore = create<TaskState>((set) => ({
   editTask: async (id: string, data: Partial<TaskFormData>) => {
     set({ error: null });
     try {
-      const updated = await taskService.updateTask(id, data);
+      const updated = await taskUpdater.run(id, data);
       set((state) => ({
         tasks: state.tasks.map((t) => (t.id === id ? updated : t)),
       }));
@@ -66,7 +75,7 @@ export const useTaskStore = create<TaskState>((set) => ({
   removeTask: async (id: string) => {
     set({ error: null });
     try {
-      await taskService.deleteTask(id);
+      await taskDeleter.run(id);
       set((state) => ({
         tasks: state.tasks.filter((t) => t.id !== id),
       }));

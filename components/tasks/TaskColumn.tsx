@@ -1,7 +1,7 @@
 "use client";
 
-import { Task } from "@/lib/types/task.types";
-import TaskCard from "@/components/tasks/TaskCard";
+import { Task } from "@/modules/tasks/domain";
+import TaskCard from "./TaskCard";
 
 interface TaskColumnProps {
   title: string;
@@ -12,7 +12,7 @@ interface TaskColumnProps {
 
 export default function TaskColumn({ title, tasks, onEdit, onDelete }: TaskColumnProps) {
   return (
-    <div className="flex flex-1 flex-col min-w-[280px]">
+    <div className="flex flex-1 flex-col min-w-70">
       {/* Column header */}
       <div className="mb-4 flex items-center gap-2">
         <h2 className="text-sm font-semibold text-gray-700">{title}</h2>

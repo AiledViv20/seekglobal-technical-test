@@ -1,10 +1,27 @@
+"use client";
+
 import { create } from "zustand";
-import { AuthState, LoginCredentials } from "@/lib/types/auth.types";
-import * as authService from "@/lib/services/auth.service";
+import { LoginCredentials, User } from "../domain";
+import { Authenticator } from "../application";
+import { MockAuthRepository } from "../infrastructure";
 
 const TOKEN_KEY = "auth_token";
 
-export const useAuthStore = create<AuthState>((set) => ({
+const repository = new MockAuthRepository();
+const authenticator = new Authenticator(repository);
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  logout: () => void;
+  checkAuth: () => void;
+}
+
+export const useAuth = create<AuthState>((set) => ({
   user: null,
   token: null,
   isAuthenticated: false,
@@ -15,7 +32,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await authService.login(credentials);
+      const response = await authenticator.login(credentials);
       localStorage.setItem(TOKEN_KEY, response.token);
 
       set({
@@ -47,7 +64,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return;
 
-    const result = authService.validateToken(token);
+    const result = authenticator.validateToken(token);
     if (result) {
       set({
         user: result.user,

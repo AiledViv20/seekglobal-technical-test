@@ -1,4 +1,4 @@
-import { Task } from "@/lib/types/task.types";
+import { Task, TaskRepository } from "../domain";
 
 let mockTasks: Task[] = [
   {
@@ -57,31 +57,29 @@ let mockTasks: Task[] = [
   },
 ];
 
-export function findAll(): Task[] {
-  return [...mockTasks];
-}
+export class MockTaskRepository implements TaskRepository {
+  findByUserId(userId: string): Task[] {
+    return mockTasks.filter((t) => t.userId === userId);
+  }
 
-export function findByUserId(userId: string): Task[] {
-  return mockTasks.filter((t) => t.userId === userId);
-}
+  findById(id: string): Task | undefined {
+    return mockTasks.find((t) => t.id === id);
+  }
 
-export function findById(id: string): Task | undefined {
-  return mockTasks.find((t) => t.id === id);
-}
+  insert(task: Task): void {
+    mockTasks = [task, ...mockTasks];
+  }
 
-export function insert(task: Task): void {
-  mockTasks = [task, ...mockTasks];
-}
+  update(id: string, data: Partial<Task>): Task {
+    const index = mockTasks.findIndex((t) => t.id === id);
+    if (index === -1) throw new Error("Tarea no encontrada.");
+    mockTasks[index] = { ...mockTasks[index], ...data };
+    return mockTasks[index];
+  }
 
-export function update(id: string, data: Partial<Task>): Task {
-  const index = mockTasks.findIndex((t) => t.id === id);
-  if (index === -1) throw new Error("Tarea no encontrada.");
-  mockTasks[index] = { ...mockTasks[index], ...data };
-  return mockTasks[index];
-}
-
-export function remove(id: string): void {
-  const index = mockTasks.findIndex((t) => t.id === id);
-  if (index === -1) throw new Error("Tarea no encontrada.");
-  mockTasks = mockTasks.filter((t) => t.id !== id);
+  remove(id: string): void {
+    const index = mockTasks.findIndex((t) => t.id === id);
+    if (index === -1) throw new Error("Tarea no encontrada.");
+    mockTasks = mockTasks.filter((t) => t.id !== id);
+  }
 }
