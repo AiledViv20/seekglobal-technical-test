@@ -3,6 +3,7 @@
 import { Task, TaskStatus } from "@/modules/tasks/domain";
 import TaskColumn from "./TaskColumn";
 
+/** Kanban board column configuration. */
 const COLUMNS: { key: TaskStatus; title: string }[] = [
   { key: "todo", title: "Por Hacer" },
   { key: "in_progress", title: "En Progreso" },
@@ -15,6 +16,10 @@ interface TaskBoardProps {
   onDelete: (task: Task) => void;
 }
 
+/**
+ * Kanban board that distributes tasks into 3 columns by status.
+ * Horizontal scroll on mobile devices.
+ */
 export default function TaskBoard({ tasks, onEdit, onDelete }: TaskBoardProps) {
   return (
     <div className="flex gap-6 overflow-x-auto pb-4">

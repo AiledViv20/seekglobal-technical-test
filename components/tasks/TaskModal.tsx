@@ -4,12 +4,14 @@ import { useState } from "react";
 import { HiX } from "react-icons/hi";
 import { Task, TaskFormData, TaskStatus, TaskPriority } from "@/modules/tasks/domain";
 
+/** Status select options. */
 const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
   { value: "todo", label: "Por Hacer" },
   { value: "in_progress", label: "En Progreso" },
   { value: "done", label: "Completada" },
 ];
 
+/** Priority select options. */
 const PRIORITY_OPTIONS: { value: TaskPriority; label: string }[] = [
   { value: "high", label: "Alta" },
   { value: "mid", label: "Media" },
@@ -23,6 +25,11 @@ interface TaskModalProps {
   onSave: (data: TaskFormData) => void;
 }
 
+/**
+ * Modal for creating or editing a task.
+ * If a task is provided, opens in edit mode with pre-filled fields.
+ * Otherwise, opens in creation mode with default values.
+ */
 export default function TaskModal({ isOpen, task, onClose, onSave }: TaskModalProps) {
   if (!isOpen) return null;
 
@@ -38,6 +45,7 @@ export default function TaskModal({ isOpen, task, onClose, onSave }: TaskModalPr
   );
 }
 
+/** Internal modal form with local state for fields. */
 function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">) {
   const [title, setTitle] = useState(task?.title ?? "");
   const [description, setDescription] = useState(task?.description ?? "");
@@ -54,7 +62,6 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
 
   return (
     <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl mx-4">
-      {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-bold text-gray-900">
             {isEditing ? "Editar Tarea" : "Nueva Tarea"}
@@ -68,7 +75,6 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Title */}
           <div>
             <label htmlFor="task-title" className="block text-sm font-medium text-gray-700 mb-1">
               Título
@@ -83,7 +89,6 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
             />
           </div>
 
-          {/* Description */}
           <div>
             <label htmlFor="task-desc" className="block text-sm font-medium text-gray-700 mb-1">
               Descripción
@@ -98,7 +103,6 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
             />
           </div>
 
-          {/* Status + Priority row */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="task-status" className="block text-sm font-medium text-gray-700 mb-1">
@@ -136,7 +140,6 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"

@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 
+/**
+ * Login form with real-time validation.
+ * Validates email format and password complexity before submitting.
+ * Redirects to the dashboard after a successful login.
+ */
 export default function LoginForm() {
   const router = useRouter();
   const { login, isLoading } = useAuth();
@@ -15,6 +20,7 @@ export default function LoginForm() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  /** Validates email format. Returns an error message or empty string if valid. */
   const validateEmail = (value: string): string => {
     if (!value.trim()) return "";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
@@ -22,6 +28,7 @@ export default function LoginForm() {
     return "";
   };
 
+  /** Validates the password: minimum 3 characters and at least one number. */
   const validatePassword = (value: string): string => {
     if (!value) return "";
     if (value.length < 3) return "La contraseña debe tener al menos 3 caracteres.";
@@ -64,7 +71,6 @@ export default function LoginForm() {
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Email */}
         <div>
           <label
             htmlFor="email"
@@ -85,7 +91,6 @@ export default function LoginForm() {
           )}
         </div>
 
-        {/* Password */}
         <div>
           <label
             htmlFor="password"
@@ -120,7 +125,6 @@ export default function LoginForm() {
           )}
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={isLoading || !isFormValid}

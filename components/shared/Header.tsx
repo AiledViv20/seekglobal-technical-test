@@ -8,6 +8,7 @@ interface HeaderProps {
   onMenuClick?: () => void;
 }
 
+/** App header. Displays name, email and avatar of the authenticated user. Includes a mobile menu button. */
 export default function Header({ onMenuClick }: HeaderProps) {
   const user = useAuth((state) => state.user);
 

@@ -10,13 +10,13 @@ interface DeleteConfirmModalProps {
   onConfirm: () => void;
 }
 
+/** Confirmation modal before deleting a task. Shows the task title and warns that the action is irreversible. */
 export default function DeleteConfirmModal({ isOpen, task, onClose, onConfirm }: DeleteConfirmModalProps) {
   if (!isOpen || !task) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl mx-4">
-        {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-900">Eliminar Tarea</h2>
           <button
@@ -31,7 +31,6 @@ export default function DeleteConfirmModal({ isOpen, task, onClose, onConfirm }:
           ¿Estás seguro de que deseas eliminar <span className="font-semibold text-gray-900">&quot;{task.title}&quot;</span>? Esta acción no se puede deshacer.
         </p>
 
-        {/* Actions */}
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}

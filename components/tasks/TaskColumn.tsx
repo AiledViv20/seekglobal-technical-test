@@ -10,10 +10,10 @@ interface TaskColumnProps {
   onDelete: (task: Task) => void;
 }
 
+/** Kanban board column that groups tasks by status. Shows a counter and empty state. */
 export default function TaskColumn({ title, tasks, onEdit, onDelete }: TaskColumnProps) {
   return (
     <div className="flex flex-1 flex-col min-w-70">
-      {/* Column header */}
       <div className="mb-4 flex items-center gap-2">
         <h2 className="text-sm font-semibold text-gray-700">{title}</h2>
         <span className="rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
@@ -21,7 +21,6 @@ export default function TaskColumn({ title, tasks, onEdit, onDelete }: TaskColum
         </span>
       </div>
 
-      {/* Cards */}
       <div className="flex flex-col gap-3">
         {tasks.map((task) => (
           <TaskCard
