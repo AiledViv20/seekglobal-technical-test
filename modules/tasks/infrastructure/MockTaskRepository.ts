@@ -55,6 +55,24 @@ let mockTasks: Task[] = [
     createdAt: "2025-01-05T16:00:00.000Z",
     userId: "1",
   },
+  {
+    id: "t7",
+    title: "Crear módulo de reportes",
+    description: "Desarrollar la vista de reportes con gráficos de rendimiento del equipo.",
+    status: "todo",
+    priority: "high",
+    createdAt: "2025-01-20T09:00:00.000Z",
+    userId: "2",
+  },
+  {
+    id: "t8",
+    title: "Revisar diseño responsive",
+    description: "Verificar que todos los componentes se adapten correctamente a dispositivos móviles.",
+    status: "todo",
+    priority: "mid",
+    createdAt: "2025-01-22T11:30:00.000Z",
+    userId: "2",
+  },
 ];
 
 export class MockTaskRepository implements TaskRepository {
