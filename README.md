@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Manager
 
-## Getting Started
+Task management application built with **Next.js 16**, **React 19**, **TypeScript** and **Zustand**, following a **hexagonal + vertical slice** architecture.
 
-First, run the development server:
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **UI:** React 19 + Tailwind CSS 4
+- **State Management:** Zustand 5
+- **Testing:** Jest 30 + React Testing Library
+- **Language:** TypeScript 5
+
+## Prerequisites
+
+- Node.js >= 18
+- npm >= 9
+
+## Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/AiledViv20/seekglobal-technical-test.git
+cd seekglobal-technical-test
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the App
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Development
+npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Production build
+npm run build
+npm start
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Test Accounts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The application uses simulated JWT authentication. You can log in with the following credentials:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| User | Email | Password |
+|------|-------|----------|
+| Alex Rodriguez | `alex@taskmanager.com` | `password123` |
+| Carlos Gutierrez | `carlos@taskmanager.com` | `password123` |
 
-## Deploy on Vercel
+## Testing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Run tests
+npm test
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Run tests with coverage report
+npm run test:coverage
+```
+
+### Coverage
+
+| Metric | Percentage |
+|--------|-----------|
+| Statements | 99.59% |
+| Branches | 95.52% |
+| Functions | 94.33% |
+| Lines | 99.59% |
+
+## Architecture
+
+The project follows a **hexagonal** architecture combined with **vertical slice**, organizing code by business modules:
+
+```
+modules/
+├── auth/                    # Authentication module
+│   ├── domain/              # Interfaces and business logic (User, AuthToken, AuthRepository)
+│   ├── application/         # Use cases (Authenticator)
+│   ├── infrastructure/      # Concrete implementations (MockAuthRepository)
+│   └── hooks/               # Zustand store (useAuth)
+└── tasks/                   # Tasks module
+    ├── domain/              # Interfaces and types (Task, TaskRepository)
+    ├── application/         # Use cases (TaskFinder, TaskCreator, TaskUpdater, TaskDeleter)
+    ├── infrastructure/      # Concrete implementations (MockTaskRepository)
+    └── hooks/               # Zustand store (useTasks)
+
+components/
+├── auth/                    # Authentication components (LoginForm)
+├── shared/                  # Shared components (Header, Sidebar)
+└── tasks/                   # Task components (TaskBoard, TaskCard, TaskModal, etc.)
+```
+
+### Layers
+
+- **Domain:** Interfaces, types and pure business logic. No external dependencies.
+- **Application:** Use cases that orchestrate business logic. Depend only on the domain layer.
+- **Infrastructure:** Concrete implementations of repositories with mock data.
+- **Hooks:** Zustand stores that connect the application layer with React components.
+
+## Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm start` | Production server |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run tests |
+| `npm run test:coverage` | Tests with coverage |
