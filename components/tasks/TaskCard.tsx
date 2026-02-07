@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { HiDotsVertical } from "react-icons/hi";
+import { IoFlagOutline } from "react-icons/io5";
+import { BsCalendar3 } from "react-icons/bs";
 import { Task } from "@/modules/tasks/domain";
 
 const PRIORITY_STYLES: Record<string, string> = {
@@ -82,11 +84,15 @@ export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
       {/* Footer: priority + date */}
       <div className="mt-3 flex items-center justify-between">
         <span
-          className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${PRIORITY_STYLES[task.priority]}`}
+          className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-0.5 text-xs font-normal ${PRIORITY_STYLES[task.priority]}`}
         >
+          <IoFlagOutline size={12} />
           {PRIORITY_LABELS[task.priority]}
         </span>
-        <span className="text-xs text-gray-400">{formattedDate}</span>
+        <span className="inline-flex items-center gap-1 text-xs text-gray-400 capitalize">
+          <BsCalendar3 size={12} />
+          {formattedDate}
+        </span>
       </div>
     </div>
   );

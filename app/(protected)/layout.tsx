@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import Sidebar from "@/components/shared/Sidebar";
+import Header from "@/components/shared/Header";
 
 export default function ProtectedLayout({
   children,
@@ -13,6 +14,7 @@ export default function ProtectedLayout({
   const router = useRouter();
   const isAuthenticated = useAuth((state) => state.isAuthenticated);
   const checkAuth = useAuth((state) => state.checkAuth);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -34,10 +36,13 @@ export default function ProtectedLayout({
 
   return (
     <div className="flex h-screen">
-      <Sidebar />
-      <main className="flex-1 overflow-auto bg-gray-50">
-        {children}
-      </main>
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 flex flex-col overflow-auto">
+        <Header onMenuClick={() => setSidebarOpen(true)} />
+        <main className="flex-1 overflow-auto bg-gray-50">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

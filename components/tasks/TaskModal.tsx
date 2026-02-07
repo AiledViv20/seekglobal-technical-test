@@ -43,18 +43,12 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
   const [description, setDescription] = useState(task?.description ?? "");
   const [status, setStatus] = useState<TaskStatus>(task?.status ?? "todo");
   const [priority, setPriority] = useState<TaskPriority>(task?.priority ?? "mid");
-  const [error, setError] = useState("");
-
   const isEditing = !!task;
+  const isFormValid = title.trim() && description.trim();
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
-    if (!title.trim() || !description.trim()) {
-      setError("El título y la descripción son obligatorios.");
-      return;
-    }
-
+    if (!isFormValid) return;
     onSave({ title: title.trim(), description: description.trim(), status, priority });
   };
 
@@ -85,7 +79,7 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Nombre de la tarea"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 transition-colors"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-300 focus:outline-none focus:ring-0 transition-colors"
             />
           </div>
 
@@ -100,7 +94,7 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe la tarea..."
               rows={3}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 transition-colors resize-none"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-300 focus:outline-none focus:ring-0 transition-colors resize-none"
             />
           </div>
 
@@ -114,7 +108,7 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
                 id="task-status"
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 transition-colors"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-0 transition-colors"
               >
                 {STATUS_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -131,7 +125,7 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
                 id="task-priority"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as TaskPriority)}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 transition-colors"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:border-gray-300 focus:outline-none focus:ring-0 transition-colors"
               >
                 {PRIORITY_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -141,13 +135,6 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
               </select>
             </div>
           </div>
-
-          {/* Error */}
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 rounded-lg px-4 py-2.5">
-              {error}
-            </p>
-          )}
 
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-2">
@@ -160,9 +147,10 @@ function TaskModalForm({ task, onClose, onSave }: Omit<TaskModalProps, "isOpen">
             </button>
             <button
               type="submit"
-              className="rounded-lg bg-[#0560C9] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#0652a8] transition-colors cursor-pointer"
+              disabled={!isFormValid}
+              className="rounded-lg bg-[#0560C9] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#0652a8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              {isEditing ? "Guardar Cambios" : "Crear Tarea"}
+              {isEditing ? "Guardar cambios" : "Crear tarea"}
             </button>
           </div>
         </form>

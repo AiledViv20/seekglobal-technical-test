@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { toast } from "sonner";
 import { Task, TaskFormData } from "../domain";
 import { TaskFinder, TaskCreator, TaskUpdater, TaskDeleter } from "../application";
 import { MockTaskRepository } from "../infrastructure";
@@ -36,10 +37,9 @@ export const useTasks = create<TaskState>((set) => ({
       const tasks = await taskFinder.run(userId);
       set({ tasks, isLoading: false });
     } catch (error) {
-      set({
-        isLoading: false,
-        error: error instanceof Error ? error.message : "Error al cargar las tareas",
-      });
+      const message = error instanceof Error ? error.message : "No se pudieron cargar las tareas. Intenta recargar la página.";
+      toast.error(message);
+      set({ isLoading: false, error: message });
     }
   },
 
@@ -51,10 +51,11 @@ export const useTasks = create<TaskState>((set) => ({
     try {
       const newTask = await taskCreator.run(data, userId);
       set((state) => ({ tasks: [newTask, ...state.tasks] }));
+      toast.success("Tarea creada exitosamente");
     } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : "Error al crear la tarea",
-      });
+      const message = error instanceof Error ? error.message : "No se pudo crear la tarea. Verifica los datos e intenta nuevamente.";
+      toast.error(message);
+      set({ error: message });
     }
   },
 
@@ -65,10 +66,11 @@ export const useTasks = create<TaskState>((set) => ({
       set((state) => ({
         tasks: state.tasks.map((t) => (t.id === id ? updated : t)),
       }));
+      toast.success("Tarea actualizada exitosamente");
     } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : "Error al actualizar la tarea",
-      });
+      const message = error instanceof Error ? error.message : "No se pudo actualizar la tarea. Por favor, intenta de nuevo.";
+      toast.error(message);
+      set({ error: message });
     }
   },
 
@@ -79,10 +81,11 @@ export const useTasks = create<TaskState>((set) => ({
       set((state) => ({
         tasks: state.tasks.filter((t) => t.id !== id),
       }));
+      toast.success("Tarea eliminada exitosamente");
     } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : "Error al eliminar la tarea",
-      });
+      const message = error instanceof Error ? error.message : "No se pudo eliminar la tarea. Intenta nuevamente.";
+      toast.error(message);
+      set({ error: message });
     }
   },
 }));

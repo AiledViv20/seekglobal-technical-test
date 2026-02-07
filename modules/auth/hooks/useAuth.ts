@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { toast } from "sonner";
 import { LoginCredentials, User } from "../domain";
 import { Authenticator } from "../application";
 import { MockAuthRepository } from "../infrastructure";
@@ -43,10 +44,9 @@ export const useAuth = create<AuthState>((set) => ({
         error: null,
       });
     } catch (error) {
-      set({
-        isLoading: false,
-        error: error instanceof Error ? error.message : "Error al iniciar sesión",
-      });
+      const message = error instanceof Error ? error.message : "No pudimos iniciar sesión. Por favor, intenta de nuevo.";
+      toast.error(message);
+      set({ isLoading: false, error: message });
     }
   },
 
